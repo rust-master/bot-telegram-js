@@ -22,6 +22,15 @@ async function getAliceSignerFromMnemonic() {
   );
 }
 
+async function getAccount2SignerFromMnemonic() {
+  return DirectSecp256k1HdWallet.fromMnemonic(
+    (await readFile("./testnet.account2.mnemonic.key")).toString(),
+    {
+      prefix: "cosmos",
+    }
+  );
+}
+
 const api = new TG({
   token: process.env.BOT_TOKEN,
 });
@@ -65,6 +74,10 @@ async function generateKey() {
   // margin curious divorce slab cruel waste faculty come fit borrow busy solution cake major husband strategy arrive tape increase power cabbage sample bird library
 }
 
+
+// cosmos1pgns8f055aqrsk0f6hwp6x9ffffwtq25r0kmkr
+// pond infant ribbon hen brain invest taxi vendor just cover recipe federal rail boss scrap confirm improve stomach junk sphere word during walk final
+
 async function web3Cosmos() {
   generateKey();
 
@@ -85,9 +98,13 @@ async function web3Cosmos() {
   const alice = (await aliceSigner.getAccounts())[0].address;
   console.log("Alice's address from signer", alice);
 
+  const account2Signer = await getAccount2SignerFromMnemonic();
+  const account2 = (await account2Signer.getAccounts())[0].address;
+  console.log("account2Signer's address from signer", account2);
+
   const signingClient = await SigningStargateClient.connectWithSigner(
     rpc,
-    aliceSigner
+    account2Signer
   );
 
   console.log(
@@ -96,6 +113,21 @@ async function web3Cosmos() {
     ", height:",
     await signingClient.getHeight()
   );
+
+  console.log("Alice balance before:", await client.getAllBalances(alice));
+  console.log("Account2 balance before:", await client.getAllBalances(account2));
+  // Execute the sendTokens Tx and store the result
+  const result = await signingClient.sendTokens(
+    account2,
+    alice,
+    [{ denom: "uatom", amount: "3000" }],
+    {
+      amount: [{ denom: "uatom", amount: "500" }],
+      gas: "200000",
+    }
+  );
+  // Output the result of the Tx
+  console.log("Transfer result:", result);
 }
 
 web3Cosmos();
