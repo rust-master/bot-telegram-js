@@ -74,7 +74,6 @@ async function generateKey() {
   // margin curious divorce slab cruel waste faculty come fit borrow busy solution cake major husband strategy arrive tape increase power cabbage sample bird library
 }
 
-
 // cosmos1pgns8f055aqrsk0f6hwp6x9ffffwtq25r0kmkr
 // pond infant ribbon hen brain invest taxi vendor just cover recipe federal rail boss scrap confirm improve stomach junk sphere word during walk final
 
@@ -115,7 +114,10 @@ async function web3Cosmos() {
   );
 
   console.log("Alice balance before:", await client.getAllBalances(alice));
-  console.log("Account2 balance before:", await client.getAllBalances(account2));
+  console.log(
+    "Account2 balance before:",
+    await client.getAllBalances(account2)
+  );
   // Execute the sendTokens Tx and store the result
   const result = await signingClient.sendTokens(
     account2,
@@ -130,6 +132,33 @@ async function web3Cosmos() {
   console.log("Transfer result:", result);
 }
 
-web3Cosmos();
+async function monitorBalance() {
+  const client = await StargateClient.connect(rpc);
+  console.log("With client, chain id:", await client.getChainId());
+  console.log("Height:", await client.getHeight());
+
+  const aliceSigner = await getAliceSignerFromMnemonic();
+  const alice = (await aliceSigner.getAccounts())[0].address;
+  console.log("Alice's address from signer", alice);
+
+  let response = await client.getAllBalances(alice);
+
+  console.log("Alice's Balances:", response);
+  console.log("Balance Amount:", response[0].amount);
+
+  if (response[0].amount >= 5000000) {
+    console.log("\n\t\t\t*Conditon Met*");
+  } else {
+    console.log("\n\t\t\t*Conditon Not Met*");
+  }
+
+  console.log(
+    "\n--------------------------------------------------------------------------\n"
+  );
+}
+
+setInterval(monitorBalance, 10 * 1000);
+
+// web3Cosmos();
 
 // main();
