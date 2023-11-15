@@ -147,8 +147,10 @@ async function monitorBalance() {
   console.log("Balance Amount:", response[0].amount);
 
   if (response[0].amount >= 5000000) {
+    sendMessageTelegram("Conditon Met");
     console.log("\n\t\t\t*Conditon Met*");
   } else {
+    sendMessageTelegram("Conditon Not Met");
     console.log("\n\t\t\t*Conditon Not Met*");
   }
 
@@ -158,6 +160,29 @@ async function monitorBalance() {
 }
 
 setInterval(monitorBalance, 10 * 1000);
+
+async function sendMessageTelegram(msg) {
+  api.setMessageProvider(messageProvider);
+  api
+    .start()
+    .then(() => {
+      console.log("API is started");
+    })
+    .catch(console.err);
+
+  api.sendMessage({
+    chat_id: "@top_coins_price_alerts",
+    text: "*" + msg + "*",
+    parse_mode: "Markdown",
+  });
+
+  api
+    .stop()
+    .then(() => {
+      console.log("API is stopped");
+    })
+    .catch(console.err);
+}
 
 // web3Cosmos();
 
