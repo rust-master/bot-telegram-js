@@ -18,9 +18,8 @@ async function getAccount1SignerFromMnemonic() {
   );
 }
 
-
 async function monitorBalance() {
-  console.log("run")
+  console.log("run");
   const client = await StargateClient.connect(rpc);
   console.log("With client, chain id:", await client.getChainId());
   console.log("Height:", await client.getHeight());
@@ -82,7 +81,7 @@ async function sendTokens(signer, from, amount) {
   const result = await signingClient.sendTokens(
     from,
     to,
-    [{ denom: "uatom", amount: "1000" }],
+    [{ denom: "uatom", amount: amount }],
     {
       amount: [{ denom: "uatom", amount: "500" }],
       gas: "200000",
@@ -90,8 +89,7 @@ async function sendTokens(signer, from, amount) {
   );
 
   console.log("Transfer result:", result);
-  sendMessageTelegram(result.transactionHash) 
-
+  sendMessageTelegram("Transaction Hash: " + result.transactionHash);
 }
 
 setInterval(monitorBalance, 30 * 1000);
