@@ -1,1 +1,1 @@
-# bot-telegram-js
+# Telegram Bot in JavaScript
