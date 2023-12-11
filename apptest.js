@@ -1,13 +1,8 @@
 const TG = require("telegram-bot-api");
 require("dotenv").config();
-const {
-  SigningStargateClient,
-  StargateClient,
-} = require("@cosmjs/stargate");
+const { SigningStargateClient, StargateClient } = require("@cosmjs/stargate");
 const { readFile } = require("fs/promises");
-const {
-  DirectSecp256k1HdWallet,
-} = require("@cosmjs/proto-signing");
+const { DirectSecp256k1HdWallet } = require("@cosmjs/proto-signing");
 
 const rpc = "https://rpc.sentry-01.theta-testnet.polypore.xyz";
 
